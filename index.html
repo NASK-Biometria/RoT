@@ -1,5 +1,78 @@
-<html>
-  <body>
-  <h1>test</h1>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Read or Tell - Multilingual Speech Dataset</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Read or Tell Dataset</h1>
+    <p>Scripted and Spontaneous Multilingual Speech Corpus</p>
+    <a href="rot_paper.pdf" target="_blank">Download the paper (PDF)</a>
+  </header>
+
+  <section>
+  <h2>📘 About the Project</h2>
+  <p>
+    <strong>Read or Tell (RoT)</strong> is a multilingual speech corpus designed to support
+    the development of robust, fair, and real-world-ready speech technologies. It contains
+    recordings from <strong>50 speakers</strong>, each contributing <strong>five minutes of
+    read speech and five minutes of spontaneous speech</strong>, collected using different
+    smartphones in controlled indoor environments.
+  </p>
+  <p>
+    The dataset is <strong>balanced by gender</strong> (25 female, 25 male) and diversified
+    in terms of <strong>age, language, and nationality</strong>. Participants represent a
+    wide range of linguistic backgrounds, with recordings available in Polish, English,
+    Ukrainian, Russian, Hindi, French, and Chinese.
+  </p>
+  <p>
+    The corpus enables researchers to explore how speaking style affects model performance
+    across multiple tasks, such as speaker verification, age and gender classification, and
+    speech style recognition. It is also suitable for studying bias, prosody, and speech
+    variability in realistic settings.
+  </p>
+
+</section>
+
+
+  <section>
+    <h2>🎧 Sample Audio</h2>
+    <h3>Speaker 001 - Read Speech</h3>
+    <audio controls>
+      <source src="assets/audio/001_f_R_01.wav" type="audio/wav">
+    </audio>
+
+    <h3>Speaker 001 - Spontaneous Speech</h3>
+    <audio controls>
+      <source src="assets/audio/001_f_T_01.wav" type="audio/wav">
+    </audio>
+  </section>
+
+  <section>
+    <h2> Summary</h2>
+    <ul>
+      <li>50 speakers (25 women, 25 men)</li>
+      <li>5 read + 5 spontaneous samples per speaker</li>
+      <li>Languages: PL, EN, UA, RU, FR, HI, ZH</li>
+    </ul>
+  </section>
+
+  <section>
+  <h2> Use Cases</h2>
+  <ul>
+    <li>Speaker verification under different speaking styles</li>
+    <li>Gender and age group classification based on voice</li>
+    <li>Evaluation of speech model robustness across devices</li>
+    <li>Training style-sensitive text-to-speech or speaker ID models</li>
+    <li>Analyzing prosodic and acoustic differences in speech</li>
+  </ul>
+</section>
+
+
+  <footer>
+    <p>&copy; 2025 NASK-PIB. Dataset for research only. Contact: <a href="mailto:deepfake@nask.pl">deepfake@nask.pl</a></p>
+  </footer>
+</body>
 </html>
