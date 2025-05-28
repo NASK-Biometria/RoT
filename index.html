@@ -1,78 +1,632 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Read or Tell - Multilingual Speech Dataset</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read or Tell - Multilingual Speech Dataset</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe8d6 100%);
+            color: #2c1810;
+            overflow-x: hidden;
+        }
+
+        /* Background with subtle animation */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 140, 60, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 100, 40, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(255, 180, 120, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Hero section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: clamp(4rem, 8vw, 8rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #d2691e 0%, #ff6b35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 300;
+            opacity: 0.8;
+            margin-bottom: 3rem;
+            line-height: 1.4;
+            color: #8b4513;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: rgba(255, 140, 60, 0.15);
+            border: 2px solid rgba(255, 140, 60, 0.3);
+            border-radius: 50px;
+            color: #d2691e;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 140, 60, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 140, 60, 0.2);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.6;
+            animation: bounce 2s infinite;
+            color: #d2691e;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Sections */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 300;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: #d2691e;
+        }
+
+        .section h3 {
+            font-size: 2rem;
+            font-weight: 400;
+            margin: 3rem 0 1.5rem;
+            color: #ff6b35;
+        }
+
+        .section p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: #2c1810;
+        }
+
+        /* Stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin: 4rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 200;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #d2691e 0%, #ff6b35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #8b4513;
+        }
+
+        /* Audio samples */
+        .audio-samples {
+            margin: 4rem 0;
+            background: rgba(255, 140, 60, 0.05);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 140, 60, 0.2);
+        }
+
+        .audio-item {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .audio-item h4 {
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            color: #d2691e;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 500px;
+            height: 60px;
+            border-radius: 30px;
+            background: rgba(255, 140, 60, 0.1);
+        }
+
+        /* Table styling */
+        .table-container {
+            margin: 4rem 0;
+            background: rgba(255, 140, 60, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 140, 60, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 140, 60, 0.2);
+        }
+
+        th {
+            background: rgba(255, 140, 60, 0.1);
+            font-weight: 500;
+            color: #d2691e;
+        }
+
+        tr:hover {
+            background: rgba(255, 140, 60, 0.05);
+        }
+
+        /* Use cases grid */
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .use-case-card {
+            background: rgba(255, 140, 60, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 140, 60, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .use-case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 140, 60, 0.15);
+        }
+
+        .use-case-card h4 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #d2691e;
+        }
+
+        .use-case-card p {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #2c1810;
+            opacity: 0.8;
+        }
+
+        /* Language grid */
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .language-item {
+            background: rgba(255, 140, 60, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 140, 60, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .language-item:hover {
+            background: rgba(255, 140, 60, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .language-code {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #d2691e;
+            margin-bottom: 0.5rem;
+        }
+
+        .language-name {
+            font-size: 0.9rem;
+            color: #8b4513;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 140, 60, 0.2);
+            margin-top: 6rem;
+            background: rgba(255, 140, 60, 0.05);
+        }
+
+        .footer p {
+            opacity: 0.8;
+            margin-bottom: 1rem;
+            color: #8b4513;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .footer-links a {
+            color: #d2691e;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ff6b35;
+        }
+
+        /* Glitch effect for title */
+        .glitch-wrapper {
+           width: 100%;
+           height: 100%;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           text-align: center;
+        }
+
+        .glitch {
+           position: relative;
+           font-size: 160px;
+           font-weight: 200;
+           line-height: 1.2;
+           color: #d2691e;
+           letter-spacing: 5px;
+           z-index: 1;
+        }
+
+        .glitch:before,
+        .glitch:after {
+           display: block;
+           content: attr(data-glitch);
+           position: absolute;
+           top: 0;
+           left: 0;
+           opacity: 0.8;
+        }
+
+        .glitch:before {
+           animation: glitch-color 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+           color: #ff6b35;
+           z-index: -1;
+        }
+
+        .glitch:after {
+           animation: glitch-color 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+           color: #ff8c42;
+           z-index: -2;
+        }
+
+        @keyframes glitch-color {
+           0% {
+              transform: translate(0);
+           }
+
+           20% {
+              transform: translate(-2px, 2px);
+           }
+
+           40% {
+              transform: translate(-2px, -2px);
+           }
+
+           60% {
+              transform: translate(2px, 2px);
+           }
+
+           80% {
+              transform: translate(2px, -2px);
+           }
+
+           to {
+              transform: translate(0);
+           }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .use-cases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+            
+            .language-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Read or Tell Dataset</h1>
-    <p>Scripted and Spontaneous Multilingual Speech Corpus</p>
-    <a href="rot_paper.pdf" target="_blank">Download the paper (PDF)</a>
-  </header>
+    <div class="bg-animation"></div>
 
-  <section>
-  <h2>📘 About the Project</h2>
-  <p>
-    <strong>Read or Tell (RoT)</strong> is a multilingual speech corpus designed to support
-    the development of robust, fair, and real-world-ready speech technologies. It contains
-    recordings from <strong>50 speakers</strong>, each contributing <strong>five minutes of
-    read speech and five minutes of spontaneous speech</strong>, collected using different
-    smartphones in controlled indoor environments.
-  </p>
-  <p>
-    The dataset is <strong>balanced by gender</strong> (25 female, 25 male) and diversified
-    in terms of <strong>age, language, and nationality</strong>. Participants represent a
-    wide range of linguistic backgrounds, with recordings available in Polish, English,
-    Ukrainian, Russian, Hindi, French, and Chinese.
-  </p>
-  <p>
-    The corpus enables researchers to explore how speaking style affects model performance
-    across multiple tasks, such as speaker verification, age and gender classification, and
-    speech style recognition. It is also suitable for studying bias, prosody, and speech
-    variability in realistic settings.
-  </p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="glitch-wrapper">
+                <div class="glitch" data-glitch="READ"><span style="font-weight:200">READ</span></div><span style="font-size: 3rem; color: #ff6b35;"> OR </span><div class="glitch" data-glitch="TELL" style="font-size: 160px; display: inline;"><span style="font-weight:200">TELL</span></div>
+            </div>
+            <p class="subtitle">Scripted and Spontaneous Multilingual Speech Corpus</p>
+            <a href="#about" class="cta-button">Explore Dataset</a>
+        </div>
+        <div class="scroll-indicator">↓</div>
+    </section>
 
-</section>
+    <!-- About Section -->
+    <section id="about" class="section">
+        <h2>Dataset Overview</h2>
+        <p><strong>Read or Tell (RoT)</strong> is a multilingual speech corpus designed to support the development of robust, fair, and real-world-ready speech technologies. It contains recordings from <strong>50 speakers</strong>, each contributing <strong>five minutes of read speech and five minutes of spontaneous speech</strong>, collected using different smartphones in controlled indoor environments.</p>
+        
+        <p>The dataset is <strong>balanced by gender</strong> (25 female, 25 male) and diversified in terms of <strong>age, language, and nationality</strong>. Participants represent a wide range of linguistic backgrounds, with recordings available in multiple languages.</p>
 
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">50</div>
+                <div class="stat-label">Speakers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">500</div>
+                <div class="stat-label">Minutes Total</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">7</div>
+                <div class="stat-label">Languages</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Speech Styles</div>
+            </div>
+        </div>
+    </section>
 
-  <section>
-    <h2>🎧 Sample Audio</h2>
-    <h3>Speaker 001 - Read Speech</h3>
-    <audio controls>
-      <source src="assets/audio/001_f_R_01.wav" type="audio/wav">
-    </audio>
+    <!-- Sample Audio -->
+    <section class="section">
+        <h3>🎧 Sample Audio</h3>
+        <div class="audio-samples">
+            <div class="audio-item">
+                <h4>Speaker 001 - Read Speech</h4>
+                <audio controls>
+                    <source src="assets/audio/001_f_R_01.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            <div class="audio-item">
+                <h4>Speaker 001 - Spontaneous Speech</h4>
+                <audio controls>
+                    <source src="assets/audio/001_f_T_01.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+    </section>
 
-    <h3>Speaker 001 - Spontaneous Speech</h3>
-    <audio controls>
-      <source src="assets/audio/001_f_T_01.wav" type="audio/wav">
-    </audio>
-  </section>
+    <!-- Languages -->
+    <section class="section">
+        <h3>🌍 Supported Languages</h3>
+        <div class="language-grid">
+            <div class="language-item">
+                <div class="language-code">PL</div>
+                <div class="language-name">Polish</div>
+            </div>
+            <div class="language-item">
+                <div class="language-code">EN</div>
+                <div class="language-name">English</div>
+            </div>
+            <div class="language-item">
+                <div class="language-code">UA</div>
+                <div class="language-name">Ukrainian</div>
+            </div>
+            <div class="language-item">
+                <div class="language-code">RU</div>
+                <div class="language-name">Russian</div>
+            </div>
+            <div class="language-item">
+                <div class="language-code">FR</div>
+                <div class="language-name">French</div>
+            </div>
+            <div class="language-item">
+                <div class="language-code">HI</div>
+                <div class="language-name">Hindi</div>
+            </div>
+            <div class="language-item">
+                <div class="language-code">ZH</div>
+                <div class="language-name">Chinese</div>
+            </div>
+        </div>
+    </section>
 
-  <section>
-    <h2> Summary</h2>
-    <ul>
-      <li>50 speakers (25 women, 25 men)</li>
-      <li>5 read + 5 spontaneous samples per speaker</li>
-      <li>Languages: PL, EN, UA, RU, FR, HI, ZH</li>
-    </ul>
-  </section>
+    <!-- Dataset Summary -->
+    <section class="section">
+        <h3>📊 Dataset Summary</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total Speakers</td>
+                        <td>50 (25 women, 25 men)</td>
+                    </tr>
+                    <tr>
+                        <td>Recording Duration</td>
+                        <td>5 read + 5 spontaneous minutes per speaker</td>
+                    </tr>
+                    <tr>
+                        <td>Languages</td>
+                        <td>Polish, English, Ukrainian, Russian, French, Hindi, Chinese</td>
+                    </tr>
+                    <tr>
+                        <td>Recording Environment</td>
+                        <td>Controlled indoor environments</td>
+                    </tr>
+                    <tr>
+                        <td>Recording Device</td>
+                        <td>Different smartphones</td>
+                    </tr>
+                    <tr>
+                        <td>Gender Balance</td>
+                        <td>50% female, 50% male</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-  <section>
-  <h2> Use Cases</h2>
-  <ul>
-    <li>Speaker verification under different speaking styles</li>
-    <li>Gender and age group classification based on voice</li>
-    <li>Evaluation of speech model robustness across devices</li>
-    <li>Training style-sensitive text-to-speech or speaker ID models</li>
-    <li>Analyzing prosodic and acoustic differences in speech</li>
-  </ul>
-</section>
+    <!-- Use Cases -->
+    <section class="section">
+        <h3>🚀 Use Cases</h3>
+        <div class="use-cases-grid">
+            <div class="use-case-card">
+                <h4>Speaker Verification</h4>
+                <p>Evaluate speaker verification systems under different speaking styles and assess robustness across read vs. spontaneous speech patterns.</p>
+            </div>
+            <div class="use-case-card">
+                <h4>Gender & Age Classification</h4>
+                <p>Train and test voice-based demographic classification models with balanced representation across different age groups and genders.</p>
+            </div>
+            <div class="use-case-card">
+                <h4>Device Robustness</h4>
+                <p>Evaluate speech model performance across different smartphone recording devices and assess cross-device generalization.</p>
+            </div>
+            <div class="use-case-card">
+                <h4>Style-Sensitive Models</h4>
+                <p>Develop text-to-speech systems and speaker identification models that can distinguish between read and spontaneous speech styles.</p>
+            </div>
+            <div class="use-case-card">
+                <h4>Prosodic Analysis</h4>
+                <p>Study prosodic and acoustic differences between scripted reading and natural spontaneous speech across multiple languages.</p>
+            </div>
+            <div class="use-case-card">
+                <h4>Multilingual Research</h4>
+                <p>Conduct cross-lingual speech research and develop language-independent speech processing algorithms.</p>
+            </div>
+        </div>
+    </section>
 
+    <!-- Access -->
+    <section class="section">
+        <h3>📥 Access Dataset</h3>
+        <p>Available for research purposes with proper attribution. The corpus enables researchers to explore how speaking style affects model performance across multiple tasks.</p>
 
-  <footer>
-    <p>&copy; 2025 NASK-PIB. Dataset for research only. Contact: <a href="mailto:deepfake@nask.pl">deepfake@nask.pl</a></p>
-  </footer>
+        <div style="text-align: center; margin: 3rem 0;">
+            <a href="rot_paper.pdf" class="cta-button" style="margin: 0 1rem;">Download Paper</a>
+            <a href="#" class="cta-button" style="margin: 0 1rem;">Request Access</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 NASK - National Research Institute</p>
+        <p>Contact: <a href="mailto:deepfake@nask.pl" style="color: #d2691e;">deepfake@nask.pl</a></p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">NASK Institute</a>
+        </div><br><br>
+        <i>This research was supported by the Polish Ministry of Digital Affairs through targeted funding from the state budget under grant no. <b>6/WII/DBI/2024</b></i>.
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Parallax effect for background
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            document.querySelector('.bg-animation').style.transform = `translateY(${rate}px)`;
+        });
+    </script>
 </body>
 </html>
